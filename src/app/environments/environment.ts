@@ -1,12 +1,12 @@
-export const environment = {
+export const firebaseConfig = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyCnq60wXc293HSmmiofwnwlS0WFADKFYAk',
-    authDomain: 'psicologia-app-liid.firebaseapp.com',
-    projectId: 'psicologia-app-liid',
-    storageBucket: 'psicologia-app-liid.firebasestorage.app',
-    messagingSenderId: '758525324097',
-    appId: '1:758525324097:web:81c06fd357901ab00a8fc0',
-    measurementId: 'G-MBVCXZ4K0W',
+    apiKey: "AIzaSyAetfLAHMXbXdPubv0MudiHnKTA6BnbQ4c",
+    authDomain: "psicologo-13a22.firebaseapp.com",
+    projectId: "psicologo-13a22",
+    storageBucket: "psicologo-13a22.firebasestorage.app",
+    messagingSenderId: "789809083888",
+    appId: "1:789809083888:web:7abafc472914ccf2e69935",
+    measurementId: "G-V18KBQVVKN"
   },
 };
