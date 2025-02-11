@@ -1,0 +1,97 @@
+<div class="container-fluid p-0">
+
+    <!-- Fila 1: Imagen y título -->
+    <div class="row title">
+        <div class="col-12">
+            <h1>UTPL Administración</h1>
+        </div>
+    </div>
+
+    <!-- Fila 2: Columnas con contenido -->
+    <div class="row" style="background: linear-gradient(to right, #1e3c72, #2a5298);">
+
+        <!-- Columna izquierda -->
+        <div class="col-md-4">
+            <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
+            <div style="width: 60%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+                <!-- Fila 1: Ícono y Texto -->
+                <div class="row" style="height: 50%; position: relative;">
+                    <button class="icono-cerrar" (click)="back()">X</button>
+                    <div class="texto-seleccion">Selecciona una <br> tematica</div>
+                </div>
+
+            
+                <!-- Fila 2: Rectángulos -->
+                <div class="row d-flex flex-column align-items-center" style="height: 50%;">
+                    <div class="rectangulo-grande rect1" style="background: linear-gradient(to bottom, #A03DBE  0%,  #EA80FC 70%, #D46EEB 100%);">
+                        <div class="rectangulo-pequeno" style="margin-left: -7%;background: linear-gradient(to bottom, #EA80FC 0%, #D46EEB 40%,  #A03DBE 100%);">
+                            <h3>{{title_1}}</h3>
+                            <p>01</p>
+                        </div>
+                    </div>
+                    <div class="rectangulo-grande rect2" style="background: linear-gradient(to bottom, #FF6F00 0%, #FDD835 100%);">
+                        <div class="rectangulo-pequeno" style="background: linear-gradient(to bottom, #FDD835 0%, #FF6F00 100%);">
+                            <h3>{{title_2}}</h3>
+                            <p>02</p>
+                        </div>
+                    </div>
+                    <div class="rectangulo-grande rect3" style="background: linear-gradient(to bottom, #EC407A 0%, #EF9A9A 100%);">
+                        <div class="rectangulo-pequeno" style="margin-left: -7%;background: linear-gradient(to bottom, #EF9A9A 0%, #EC407A 100%);">
+                            <h3>{{title_3}}</h3>
+                            <p>03</p>
+                        </div>
+                    </div>
+                    <div class="rectangulo-grande rect4" style="background: linear-gradient(to bottom, #00ACC1 0%, #A5D6A7 100%);">
+                        <div class="rectangulo-pequeno" style="background: linear-gradient(to bottom, #A5D6A7 0%, #00ACC1 100%);">
+                            <h3>{{title_4}}</h3>
+                            <p>04</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    
+        <!-- Columna derecha -->
+        <div class="col-md-8">
+            <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
+            <div style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+                
+                <!-- Título principal -->
+                <h1 style="color: white; font-family: 'Arial', sans-serif;">Tematicas</h1>
+                
+                <!-- contenido sobre las tematicas -->
+                <div class="mb-3">
+                    <hr>
+                    <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Tematica 1 </h3>
+                    <label for="colorSelectorGoogle" class="form-label text-white">Selecciona un nombre para la Tematica 1</label>
+                    <div class="input-group" style="width: 40%;">
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_1" (focus)="onInputFocus(title_1)">
+                    </div>
+                    <hr>
+                    <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Tematica 2</h3>
+                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 2</label>
+                    <div class="input-group" style="width: 40%;">
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_2" (focus)="onInputFocus(title_2)">
+                    </div>
+                    <hr>
+                    <h3 style="color: #EC407A; font-family: 'Arial', sans-serif;">Tematica 3</h3>
+                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 3</label>
+                    <div class="input-group" style="width: 40%;">
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_3" (focus)="onInputFocus(title_3)">
+                    </div>
+                    <hr>
+                    <h3 style="color: #00ACC1; font-family: 'Arial', sans-serif;">Tematica 4</h3>
+                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 4</label>
+                    <div class="input-group" style="width: 40%;">
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_4" (focus)="onInputFocus(title_4)">
+                    </div>
+                </div>
+                
+                <!-- Botón "Publicar" -->
+                <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 70%; margin-top: -14%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+        
+            </div>
+        </div>
+    </div>

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirestoreService } from '@core/services/firestore.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';  
 
 
 @Component({
@@ -13,10 +14,12 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class DashboardComponent implements OnInit {
+  private router = inject(Router);
   users: any[] = [];
   colors: any = [];
   colorValue: string = '#3284FF';
   colorValue2: string = '#FFAB00';
+
 
 
   decimalToHexColor(decimal: number): string {
@@ -39,12 +42,17 @@ hexToFlutterColor(hex: string): number {
   onColorChange(event: any) {
     this.colorValue = event.target.value;
   }
+
   onColorChange2(event: any) {
     this.colorValue2 = event.target.value;
   }
 
   onkeyClikPublic(){
     this.firestoreService.updateColor(this.colors[0].id,this.hexToFlutterColor(this.colorValue2));
+  }
+
+  tematicas(){
+    this.router.navigate(['/tematicas']);
   }
 
 

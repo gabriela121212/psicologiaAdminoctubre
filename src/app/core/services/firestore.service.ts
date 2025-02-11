@@ -9,16 +9,23 @@ import { Observable } from 'rxjs';
 export class FirestoreService {
   constructor(private firestore: Firestore) {}
 
-  getUsers(): Observable<any[]> {
-    const usersCollection = collection(this.firestore, 'users');
-    return collectionData(usersCollection, { idField: 'id' }); 
-  }
   getPublic(): Observable<any[]> {
     const usersCollection = collection(this.firestore, 'public');
     return collectionData(usersCollection, { idField: 'id' }); 
   }
+
+  getTematicas(): Observable<any[]> {
+    const usersCollection = collection(this.firestore, 'categories');
+    return collectionData(usersCollection, { idField: 'id' }); 
+  }
+
   updateColor(documentId: string, newColor: number) {
     const docRef = doc(this.firestore, 'public', documentId);
     return updateDoc(docRef, {color: newColor});
+  }
+
+  updateTitle(id: string, newTitle: string) {
+    const docRef = doc(this.firestore, 'categories', id); 
+    return updateDoc(docRef, { title: newTitle });
   }
 }
