@@ -1,11 +1,15 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './modules/admin/dashboard/dashboard.component';
-import { TematicasComponent } from './modules/admin/tematicas/tematicas.component';
+import { LoginComponent } from './modules/auth/login/login.component';
 
 export const routes: Routes = [
-    { path: '', component: DashboardComponent },
-    { path: 'tematicas', component: TematicasComponent },
+  { path: 'login', component: LoginComponent },
+
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./modules/admin/admin.routes').then((m) => m.adminRoutes),
+  },
+
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' },
 ];
-
-
-

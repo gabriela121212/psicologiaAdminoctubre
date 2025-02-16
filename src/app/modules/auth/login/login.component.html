@@ -1,0 +1,29 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-gray-200">
+  <div class="rounded-lg p-8 w-[30rem] h-[30rem] text-center relative">
+
+    <div class="login-image-large"></div>
+
+    <h2 class="text-2xl font-semibold text-gray-700 mt-[10rem]">Inicia Sesión</h2>
+
+    <div *ngIf="errorMessage" class="mt-4 p-2 bg-red-100 text-red-600 rounded">
+      {{ errorMessage }}
+    </div>
+
+    <ng-template #loginTemplate>
+      <button
+        (click)="login()"
+        [disabled]="isLoading"
+        class="mt-4 bg-[#F2F2F2] text-gray-400 px-4 py-3 rounded-[40px] flex items-center justify-center w-full disabled:opacity-50">
+        <div class="w-6 h-6 mr-2 bg-cover bg-center logo-google"></div>
+        <span *ngIf="!isLoading">Continuar con Google</span>
+        <span *ngIf="isLoading">Iniciando sesión...</span>
+      </button>
+
+      <button
+        class="mt-4 bg-[#F2F2F2] text-gray-400 px-4 py-3 rounded-[40px] flex items-center justify-center w-full">
+        <div class="w-6 h-6 mr-2 bg-cover bg-center logo-microsoft"></div>
+        Continuar con Microsoft
+      </button>
+    </ng-template>
+  </div>
+</div>

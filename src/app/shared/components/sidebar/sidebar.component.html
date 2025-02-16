@@ -1,0 +1,27 @@
+<div class="w-64 h-screen bg-gray-900 text-white flex flex-col items-center py-6">
+  <!-- Usuario autenticado -->
+  <ng-container *ngIf="user$ | async as user">
+    <div class="flex flex-col items-center">
+      <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-xl font-semibold">
+        {{ user.displayName?.charAt(0) || 'U' }}
+      </div>
+      <p class="mt-2 text-lg">{{ user.displayName || 'Usuario' }}</p>
+    </div>
+
+    <nav class="mt-6 w-full">
+      <ul class="space-y-4">
+        <li *ngFor="let route of sidebarRoutes"
+            (click)="navigateTo(route.path)"
+            class="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+          {{ route.label }}
+        </li>
+      </ul>
+    </nav>
+
+    <button
+      (click)="logout()"
+      class="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+      Cerrar Sesión
+    </button>
+  </ng-container>
+</div>

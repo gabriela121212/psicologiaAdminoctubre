@@ -1,0 +1,31 @@
+.login-image-large {
+  width: 20rem;
+  height: 20rem;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/psicologia-app-liid.firebasestorage.app/o/images%2FloginAdmin.png?alt=media&token=1e918700-93f5-450d-a426-4c5bc365abfa');
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: -10rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+.logo-google {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/psicologia-app-liid.firebasestorage.app/o/images%2Flogo_google.png?alt=media&token=0cf71c6e-d0a9-4866-b600-5d862962c1ad');
+  background-size: cover;
+  background-position: center;
+  margin-right: 2rem;
+}
+
+.logo-microsoft {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/psicologia-app-liid.firebasestorage.app/o/images%2Flogo_Microsoft.png?alt=media&token=b74d2baa-ecc5-4c85-85b4-a9bbfbcd76b9');
+  background-size: cover;
+  background-position: center;
+  margin-right: 2rem;
+}
+
