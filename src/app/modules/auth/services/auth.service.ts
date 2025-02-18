@@ -39,7 +39,7 @@ export class AuthService {
       uid: user.uid,
       displayName: user.displayName ?? 'Usuario desconocido',
       email: user.email,
-      role: 'user',
+      role: 'admin',
     };
   }
 

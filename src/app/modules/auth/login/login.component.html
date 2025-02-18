@@ -9,7 +9,7 @@
       {{ errorMessage }}
     </div>
 
-    <ng-template #loginTemplate>
+    <div *ngIf="!(user$ | async)">
       <button
         (click)="login()"
         [disabled]="isLoading"
@@ -24,6 +24,7 @@
         <div class="w-6 h-6 mr-2 bg-cover bg-center logo-microsoft"></div>
         Continuar con Microsoft
       </button>
-    </ng-template>
+    </div>
+
   </div>
 </div>

@@ -1,9 +1,7 @@
 <div class="flex h-screen">
-  <!-- Sidebar -->
-  <app-sidebar class="w-64 flex-shrink-0"></app-sidebar>
+  <app-sidebar *ngIf="(user$ | async)?.role === 'admin'" class="w-64 flex-shrink-0"></app-sidebar>
 
-  <!-- Contenido -->
-  <div class="flex-1 p-6 overflow-auto">
+  <div class="flex-1 overflow-auto">
     <router-outlet></router-outlet>
   </div>
 </div>

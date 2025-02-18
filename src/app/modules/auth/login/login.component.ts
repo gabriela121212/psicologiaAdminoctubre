@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user$.pipe(take(1)).subscribe((user) => {
-      if (user) {
+      if (user?.role === 'admin') {
         this.router.navigate(['/admin']);
       }
     });
@@ -49,21 +49,6 @@ export class LoginComponent implements OnInit {
     } catch (error) {
       console.error('Error en el login:', error);
       this.errorMessage = 'Error al iniciar sesión. Inténtalo de nuevo.';
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  async logout() {
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    try {
-      await this.authService.logout();
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Error en el logout:', error);
-      this.errorMessage = 'Error al cerrar sesión. Inténtalo de nuevo.';
     } finally {
       this.isLoading = false;
     }
