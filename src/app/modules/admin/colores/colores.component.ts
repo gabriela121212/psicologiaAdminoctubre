@@ -17,6 +17,13 @@ export class ColoresComponent implements OnInit {
   colors: any = [];
   colorValue: string = '#3284FF';
   colorValue2: string = '#FFAB00';
+  isDragging=false;
+  base64Image:string | null = null;
+  nameImg = '';
+  headers = ['data:image/jpeg;base64,','data:image/png;base64,','data:image/jpg;base64,','data:application/octet-stream;base64,'];
+
+
+
 
   decimalToHexColor(decimal: number): string {
     let r = (decimal >> 16) & 0xff;
@@ -46,10 +53,19 @@ export class ColoresComponent implements OnInit {
   }
 
   onkeyClikPublic() {
+    if(this.base64Image === null)return;
+
+
     this.firestoreService.updateColor(
       this.colors[0].id,
       this.hexToFlutterColor(this.colorValue2)
     );
+
+    this.firestoreService.updateImage('marciano3.png', this.base64Image).subscribe((res) => {
+      console.log('Imagen actualizada con éxito:', res);
+    }, (error) => {
+      console.error('Error al actualizar la imagen:', error);
+    });
   }
 
   tematicas() {
@@ -65,5 +81,47 @@ export class ColoresComponent implements OnInit {
       console.log(this.colors);
       console.log('colorrrrr ' + this.colorValue2);
     });
+
+    // Obtener la imagen en base64
+    this.firestoreService.getImageBase64('marciano3.png').subscribe((base64) => {
+      this.base64Image = base64;
+      console.log('Imagen en Base64:', this.base64Image);
+    });
   }
+
+  onDragEnter(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.base64Image = reader.result as string;
+        this.nameImg = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  hasValidHeader(image: string | null): boolean {
+    if(!image)return false;
+    return this.headers.some(header => image.startsWith(header));
+}
+
 }

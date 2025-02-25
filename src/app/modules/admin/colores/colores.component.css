@@ -1,0 +1,22 @@
+.title h1 {
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    background: #061755;
+    margin: 0;
+}
+
+.dropzone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #ccc;
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+.dropzone.dragging {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}

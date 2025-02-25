@@ -29,6 +29,7 @@ export class SidebarComponent {
     { label: 'Dashboard', path: '/' },
     { label: 'Tematicas', path: '/admin/tematicas' },
     { label: 'Colores Login', path: '/admin/colores' },
+    { label: 'Cuestionario', path: '/admin/cuestionario' },
   ];
 
   async logout() {

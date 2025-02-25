@@ -1,7 +1,7 @@
 <div class="container-fluid p-0">
 
   <!-- Fila 1: Imagen y título -->
-  <div class="row title">
+  <div class="row title" style="width: 102.5%;">
       <div class="col-12">
           <h1>UTPL Administración</h1>
       </div>
@@ -13,11 +13,19 @@
       <!-- Columna izquierda -->
       <div class="col-md-4">
           <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
-          <div style="width: 60%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+          <div style="width: 75%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
               <!-- Fila 1: Imagen -->
               <div class="row" style="height: 50%;">
                   <div class="col-12">
-                      <img src="./assets/marciano3.png" class="img-fluid" style="height: 80%; object-fit: cover; border-radius: 40px 40px 0 0;margin-left: 5%;">
+                      <!-- Área de arrastre para imágenes -->
+                    <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-4 dropzone" style="width: 90%; height: 300px; border-radius: 20px; background-color: transparent;margin-left: 4%;" [style.border]="!base64Image ? '2px dashed white' : '2px solid white'" 
+                    [class.dragging]="isDragging" [style.backgroundImage]="!hasValidHeader(base64Image) ? 'url(data:image/jpeg;base64,' + base64Image+ ')' : ('url(' + base64Image+ ')')" [style.backgroundSize]="'cover'"[style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'"
+                    (dragenter)="onDragEnter($event)"(dragleave)="onDragLeave($event)"(dragover)="onDragOver($event)"(drop)="onDrop($event)">
+                        <!-- Texto dentro del área -->
+                        <h3 class="text-white text-center" *ngIf="!base64Image"> Arrastre imagen o importe de un archivo</h3>
+                        <!-- Icono debajo del texto -->
+                        <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image"></i>
+                    </div>
                   </div>
               </div>
 
@@ -40,22 +48,22 @@
       <!-- Columna derecha -->
       <div class="col-md-8">
           <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
-          <div style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+          <div style="width: 80%; height: 720px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
 
               <!-- Título principal -->
-              <h1 style="color: white; font-family: 'Arial', sans-serif;">Botones</h1>
+              <h1 style="color: white; font-family: 'Arial', sans-serif;font-size: 3.0rem;">Botones</h1>
 
               <!-- Input de tipo numérico con Bootstrap -->
               <div class="mb-3">
                   <hr>
-                  <h3 style="color: #3284FF; font-family: 'Arial', sans-serif;">Google</h3>
+                  <h3 style="color: #3284FF; font-family: 'Arial', sans-serif;margin-top: 10%;">Google</h3>
                   <label for="colorSelectorGoogle" class="form-label text-white">Selecciona un color para el botón Google</label>
                   <div class="input-group" style="width: 40%;">
                       <input type="text" class="form-control rounded-pill" placeholder="Selecciona un color"[value]="colorValue" readonly>
                       <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue" (input)="onColorChange($event)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
                   </div>
-                  <hr>
-                  <h3 style="color: #FFAB00; font-family: 'Arial', sans-serif;">UTPL</h3>
+                  
+                  <h3 style="color: #FFAB00; font-family: 'Arial', sans-serif;margin-top: 10%;">UTPL</h3>
                   <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un color para el botón UTPL</label>
                   <div class="input-group" style="width: 40%;">
                       <input type="text" class="form-control rounded-pill" placeholder="Selecciona un color"[value]="colorValue2" readonly>

@@ -13,44 +13,55 @@
         <!-- Columna izquierda -->
         <div class="col-md-4">
             <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
-            <div style="width: 60%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+            <div class="overflow-hidden" style="width: 70%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
                 <!-- Fila 1: Ícono y Texto -->
                 <div class="row" style="height: 50%; position: relative;">
                     <button class="icono-cerrar" (click)="back()">X</button>
                     <div class="texto-seleccion">Selecciona una <br> tematica</div>
                 </div>
 
-            
-                <!-- Fila 2: Rectángulos -->
-                <div class="row d-flex flex-column align-items-center" style="height: 50%;">
-                    <div class="rectangulo-grande rect1" style="background: linear-gradient(to bottom, #A03DBE  0%,  #EA80FC 70%, #D46EEB 100%);">
-                        <div class="rectangulo-pequeno" style="margin-left: -7%;background: linear-gradient(to bottom, #EA80FC 0%, #D46EEB 40%,  #A03DBE 100%);">
-                            <h3>{{title_1}}</h3>
-                            <p>01</p>
+                <!-- CONTENEDOR PADRE QUE ENCAPSULA LOS 4 RECTÁNGULOS -->
+                <div class="relative w-[70%] h-[545px] flex flex-wrap gap-4 overflow-hidden" style="margin-top: -58%;margin-left: 13%;">
+
+                    <div class="w-[40vw] h-[80vh] relative overflow-hidden max-w-[170px] max-h-[600px]">
+                        <!-- Parte superior más pequeña -->
+                        <div class="absolute top-0 left-0 w-full h-[25%] bg-gradient-to-b from-[{{colorValue}}] to-[{{colorValue_2}}] flex justify-center items-center text-white inter">
+                            <h3 class="text-[clamp(1rem, 2vw, 2rem)] uppercase" style="margin-top: -43%;">{{title_1}} <br><br> <h3 class="text-[clamp(0.8rem, 1.5vw, 1.5rem)] uppercase" style="margin-left: 40%;">01</h3></h3>
                         </div>
+                        <!-- Parte inferior más grande y subida -->
+                        <div class="absolute bottom-0 left-0 w-full h-[75%] bg-gradient-to-b from-[{{colorValue}}] to-[{{colorValue_2}}] translate-y-[-15%]"></div>
                     </div>
-                    <div class="rectangulo-grande rect2" style="background: linear-gradient(to bottom, #FF6F00 0%, #FDD835 100%);">
-                        <div class="rectangulo-pequeno" style="background: linear-gradient(to bottom, #FDD835 0%, #FF6F00 100%);">
-                            <h3>{{title_2}}</h3>
-                            <p>02</p>
+    
+                    <div class="w-[40vw] h-[80vh] relative overflow-hidden max-w-[170px] max-h-[400px]" style="margin-top: -230%;margin-left: 30%;">
+                        <!-- Parte superior con el degradado claro -->
+                        <div class="absolute top-0 left-0 w-full h-[40%] bg-gradient-to-b from-[{{colorValue_3}}] to-[{{colorValue_4}}]  flex justify-center items-center text-white inter">
+                            <h3 class="text-[clamp(1rem, 2vw, 2rem)] uppercase" style="margin-top: -43%;">{{title_2}} <br><br> <h3 class="text-[clamp(0.8rem, 1.5vw, 1.5rem)] uppercase" style="margin-left: 40%;">02</h3></h3>
                         </div>
+                        
+                        <!-- Parte inferior con el degradado oscuro -->
+                        <div class="absolute bottom-0 left-0 w-full h-[60%] bg-gradient-to-b from-[{{colorValue_3}}] to-[{{colorValue_4}}] translate-y-[-30%]"></div>
                     </div>
-                    <div class="rectangulo-grande rect3" style="background: linear-gradient(to bottom, #EC407A 0%, #EF9A9A 100%);">
-                        <div class="rectangulo-pequeno" style="margin-left: -7%;background: linear-gradient(to bottom, #EF9A9A 0%, #EC407A 100%);">
-                            <h3>{{title_3}}</h3>
-                            <p>03</p>
+
+                    <div class="w-[40vw] h-[80vh] relative overflow-hidden max-w-[170px] max-h-[361px]" style="margin-top: -180%;">
+                        <!-- Parte superior con el degradado claro -->
+                        <div class="absolute top-0 left-0 w-full h-[45%] bg-gradient-to-b from-[{{colorValue_5}}] to-[{{colorValue_6}}]  flex justify-center items-center text-white inter">
+                            <h3 class="text-[clamp(1rem, 2vw, 2rem)] uppercase" style="margin-top: -43%;">{{title_3}} <br><br> <h3 class="text-[clamp(0.8rem, 1.5vw, 1.5rem)] uppercase" style="margin-left: 40%;">03</h3></h3>
                         </div>
+                        
+                        <!-- Parte inferior con el degradado oscuro -->
+                        <div class="absolute bottom-0 left-0 w-full h-[55%] bg-gradient-to-b from-[{{colorValue_5}}] to-[{{colorValue_6}}] translate-y-[-30%]"></div>
                     </div>
-                    <div class="rectangulo-grande rect4" style="background: linear-gradient(to bottom, #00ACC1 0%, #A5D6A7 100%);">
-                        <div class="rectangulo-pequeno" style="background: linear-gradient(to bottom, #A5D6A7 0%, #00ACC1 100%);">
-                            <h3>{{title_4}}</h3>
-                            <p>04</p>
+                    <div class="w-[40vw] h-[80vh] relative overflow-hidden max-w-[170px] max-h-[200px]" style="margin-top: -133%;margin-left: 30%;">
+                        <!-- Parte superior con el degradado claro -->
+                        <div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-[{{colorValue_7}}] to-[{{colorValue_8}}]  flex justify-center items-center text-white inter">
+                            <h3 class="text-[clamp(1rem, 2vw, 2rem)] uppercase" style="margin-top: -13%;">{{title_4}} <br> <br> <h3 class="text-[clamp(0.8rem, 1.5vw, 1.5rem)] uppercase" style="margin-left: 40%;">04</h3></h3>
                         </div>
+                        <!-- Parte inferior con el degradado oscuro -->
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-[{{colorValue_7}}] to-[{{colorValue_8}}] translate-y-[-30%]"></div>
+                        
                     </div>
                 </div>
-
             </div>
-            
         </div>
     
         <!-- Columna derecha -->
@@ -67,31 +78,66 @@
                     <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Tematica 1 </h3>
                     <label for="colorSelectorGoogle" class="form-label text-white">Selecciona un nombre para la Tematica 1</label>
                     <div class="input-group" style="width: 40%;">
-                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_1" (focus)="onInputFocus(title_1)">
+
+
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_1" (focus)="onFocus(obj[1].id)" (blur)="onBlur(title_1)">
+                        <div class="input-group" style="width: 40%;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue" (input)="onColorChange($event,colorValue)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_2" (input)="onColorChange($event,colorValue_2)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                        </div>
+
+
                     </div>
                     <hr>
                     <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Tematica 2</h3>
                     <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 2</label>
                     <div class="input-group" style="width: 40%;">
-                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_2" (focus)="onInputFocus(title_2)">
+
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_2" (focus)="onFocus(obj[0].id)" (blur)="onBlur(title_2)">
+                        <div class="input-group" style="width: 40%;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_3" (input)="onColorChange($event,colorValue_3)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_4" (input)="onColorChange($event,colorValue_4)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                        </div>
+
+
+
+
                     </div>
                     <hr>
                     <h3 style="color: #EC407A; font-family: 'Arial', sans-serif;">Tematica 3</h3>
                     <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 3</label>
                     <div class="input-group" style="width: 40%;">
-                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_3" (focus)="onInputFocus(title_3)">
+
+
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_3" (focus)="onFocus(obj[3].id)" (blur)="onBlur(title_3)">
+                        <div class="input-group" style="width: 40%;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_5" (input)="onColorChange($event,colorValue_5)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_6" (input)="onColorChange($event,colorValue_6)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                        </div>
+
                     </div>
                     <hr>
                     <h3 style="color: #00ACC1; font-family: 'Arial', sans-serif;">Tematica 4</h3>
                     <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nombre para la Tematica 4</label>
                     <div class="input-group" style="width: 40%;">
-                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_4" (focus)="onInputFocus(title_4)">
+
+
+                        <input type="text" class="form-control rounded-pill" placeholder="Nombe" [(ngModel)]="title_4" (focus)="onFocus(obj[2].id)" (blur)="onBlur(title_4)">
+                        <div class="input-group" style="width: 40%;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_7" (input)="onColorChange($event,colorValue_7)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                            <input type="color" id="colorSelectorGoogle" [(ngModel)]="colorValue_8" (input)="onColorChange($event,colorValue_8)" style="height: 35px; width: 35px; border: none; padding: 0; margin-left: 10px;">
+                        </div>
+
+
                     </div>
                 </div>
                 
                 <!-- Botón "Publicar" -->
                 <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 70%; margin-top: -14%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
-        
             </div>
         </div>
     </div>
+
+
+
+    

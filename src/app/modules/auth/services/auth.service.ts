@@ -1,13 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  Auth,
-  authState,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  user,
-  User,
-} from '@angular/fire/auth';
+import { Auth,authState,GoogleAuthProvider,signInWithPopup,signOut,user,User,} from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, from } from 'rxjs';
@@ -95,7 +87,6 @@ export class AuthService {
   getUser(): Observable<User | null> {
     return user(this.auth);
   }
-
   async logout() {
     await signOut(this.auth);
     this.userToken = null;
