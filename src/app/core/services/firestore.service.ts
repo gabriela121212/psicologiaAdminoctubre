@@ -1,13 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, CollectionReference} from '@angular/fire/firestore';
 import { Storage, ref, getDownloadURL,uploadBytes } from '@angular/fire/storage';
-import { doc, updateDoc } from '@angular/fire/firestore';
-import { from,Observable } from 'rxjs';
+import { doc, updateDoc,writeBatch, setDoc,getDocs } from '@angular/fire/firestore';
+import { from,Observable,combineLatest,of,defaultIfEmpty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+
+interface Question {
+  options: string[];
+  order: number;
+  title: string;
+  values: number[];
+}
+
+interface Category {
+  id: string;
+  title: string;
+  colors: string[];
+  order: number;
+  questions?: Question[];
+}
+
+
+
 @Injectable({
   providedIn: 'root', 
 })
+
+
 export class FirestoreService {
   constructor(private firestore: Firestore, private storage: Storage, private http: HttpClient) {}
 
@@ -20,6 +40,27 @@ export class FirestoreService {
     const usersCollection = collection(this.firestore, 'categories');
     return collectionData(usersCollection, { idField: 'id' }); 
   }
+
+
+
+  fetchCategoriesWithQuestions(): Observable<Category[]> {
+    const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
+    return collectionData(categoriesCollection, { idField: 'id' }).pipe(
+      switchMap((categories: Category[]) => {
+        if (!categories.length)return of([]); 
+
+        const categoryObservables = categories.map((category) => {
+          const questionsCollection = collection(this.firestore, `categories/${category.id}/questions`) as CollectionReference<Question>;
+          return collectionData(questionsCollection, { idField: 'id' }).pipe(
+            defaultIfEmpty([]),map((questions: Question[]) => ({...category,questions,}))
+          );
+
+        });
+        return combineLatest(categoryObservables);
+      })
+    );
+  }
+
 
   updateColor(documentId: string, newColor: number) {
     const docRef = doc(this.firestore, 'public', documentId);
@@ -61,6 +102,43 @@ async updateColors(colorsMap: Map<string, string[]>) {
       console.error('Error al actualizar los colores:', error);
     });
 }
+
+
+async  updateQuestions(documentId: string, newQuestions: Question[]) {
+  try {
+    const categoryDocRef = doc(this.firestore, 'categories', documentId);
+    const questionsCollectionRef = collection(categoryDocRef, 'questions'); // Referencia a la colección 'questions' dentro del documento de categoría
+
+    const batch = writeBatch(this.firestore);
+
+    // Obtener los documentos existentes en la colección de 'questions'
+    const snapshot = await getDocs(questionsCollectionRef);
+
+    snapshot.forEach((docSnap) => {
+      batch.delete(docSnap.ref); // Borrar cada documento de la colección
+    });
+
+    // Agregar los nuevos documentos a la colección 'questions'
+    newQuestions.forEach((question, index) => {
+      const questionDocRef = doc(questionsCollectionRef, `question${index + 1}`); // Crear un nuevo documento con el nombre 'question1', 'question2', etc.
+      batch.set(questionDocRef, question); // Añadir la pregunta a la operación en el batch
+    });
+
+    // Ejecutar la operación en batch
+    await batch.commit().catch((error) => {
+      console.error("Error en el batch commit:", error);
+    });
+    console.log('Colección de preguntas actualizada con éxito');
+  } catch (error) {
+    console.error('Error al actualizar las preguntas:', error);
+  }
+}
+
+
+
+
+
+
 
   //multimedia//
   // Función para obtener la URL de la imagen en Firebase Storage
@@ -111,3 +189,5 @@ async updateColors(colorsMap: Map<string, string[]>) {
     return new Blob([ab]);
   }
 }
+
+

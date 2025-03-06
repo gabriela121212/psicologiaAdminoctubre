@@ -1,1 +1,134 @@
-<p>cuestionarios works!</p>
+
+    <div class="container-fluid p-0">
+
+        <!-- Fila 1: Imagen y título -->
+        <div class="row title">
+            <div class="col-12">
+                <h1>UTPL Administración</h1>
+            </div>
+        </div>
+    
+        <!-- Fila 2: Columnas con contenido -->
+        <div class="row" style="background: linear-gradient(to right, #1e3c72, #2a5298);">
+    
+            <!-- Columna izquierda -->
+            <div class="col-md-4">
+                <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
+                <div class="overflow-hidden" style="width: 70%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+                    <!-- Fila 1: Contenedor con el rectángulo  Texto encima del rectángulo -->
+                    <div class="relative w-[100%] h-[82px] mx-auto text-white text-xl font-semibold overflow-hidden text-center " style="background: linear-gradient(to right, #DD76F2, #80448C);">
+                        <p style="margin-top: 5%;">Cuestionario Breve: Factores Predisponentes del {{seleccion}}</p>
+                    </div>
+                    <!-- Fila 2: Imágenes -->
+                    <div class="flex justify-between">
+
+
+                        <!-- Área de arrastre para imágenes -->
+                      <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-4 dropzone" style="width: 65%; height: 100px; border-radius: 20px; background-color: transparent;margin-left: 4%;" [style.border]="!base64Image ? '2px dashed white' : '2px solid white'" 
+                      [class.dragging]="isDragging" [style.backgroundImage]="!hasValidHeader(base64Image) ? 'url(data:image/jpeg;base64,' + base64Image+ ')' : ('url(' + base64Image+ ')')" [style.backgroundSize]="'100% 100%'"[style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'"
+                      (dragenter)="onDragEnter($event)"(dragleave)="onDragLeave($event)"(dragover)="onDragOver($event)"(drop)="onDrop($event)">
+                          <!-- Texto dentro del área -->
+                          <h3 class="text-white text-center" *ngIf="!base64Image"> Arrastre imagen o importe de un archivo</h3>
+                          <!-- Icono debajo del texto -->
+                          <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image"></i>
+                      </div>
+
+                      <!-- Área de arrastre para imágenes -->
+                      <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-4 dropzone" style="width: 35%; height: 120px; border-radius: 20px; background-color: transparent;margin-left: 4%;" [style.border]="!base64Image2 ? '2px dashed white' : '2px solid white'" 
+                      [class.dragging]="isDragging2" [style.backgroundImage]="!hasValidHeader(base64Image2) ? 'url(data:image/jpeg;base64,' + base64Image2+ ')' : ('url(' + base64Image2+ ')')" [style.backgroundSize]="'100% 100%'"[style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'"
+                      (dragenter)="onDragEnter($event)"(dragleave)="onDragLeave($event)"(dragover)="onDragOver($event)"(drop)="onDrop($event)">
+                          <!-- Texto dentro del área -->
+                          <h3 class="text-white text-center" *ngIf="!base64Image2"> Arrastre imagen o importe de un archivo</h3>
+                          <!-- Icono debajo del texto -->
+                          <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image2"></i>
+                      </div>
+
+
+                    </div>
+                                        
+                    <!-- CONTENEDOR PADRE QUE ENCAPSULA LOS 4 RECTÁNGULOS -->
+                    <div class="relative w-[90%] h-[400px] flex flex-wrap gap-4 overflow-hidden" style="margin-left: 5%;background-color: #ffffff;border-radius: 10px;">
+                        <!-- Scrollpane -->
+                      <div class="h-64 overflow-y-scroll h-[100%]  scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 text-start " style="color:#000000;">
+                          <div *ngFor="let pregunta of preguntas; let i = index">
+                            <h3 class="apple" style="font-size: 0.9rem;margin-left: 4%;margin-top: 3%;">{{ pregunta.texto }}</h3>
+                            <div *ngFor="let respuesta of pregunta.respuestas">
+                              <label class="apple" style="font-size: 0.8rem;margin-left: 4%;">
+                                <input type="radio" [name]="'pregunta' + i" [value]="respuesta">
+                                {{ respuesta }}
+                              </label>
+                            </div>
+                            <br>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        
+
+
+
+
+            <!-- Columna derecha -->
+            <div class="col-md-8">
+                <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
+                <div class="overflow-hidden" style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+
+                    <!-- selector -->
+                    <div class="flex flex-col items-start space-y-4">
+
+                        <label for="estado" class="text-lg font-semibold text-white">Selecciona una opción:</label>
+                        <select id="estado" [(ngModel)]="seleccion" (change)="actualizarSeleccion()" 
+                                class="p-2 border rounded-lg shadow-md bg-white focus:ring-2 focus:ring-blue-500">
+                          <option *ngFor="let opcion of opciones" [value]="opcion">
+                            {{ opcion }}
+                          </option>
+                        </select>
+                      </div>
+                      <br>
+                      
+
+                      
+                    <!-- Scrollpane -->
+                      <div class="h-[66%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100" style="color:#F9F9F9;">
+                          <hr>
+                          <div *ngFor="let pregunta of preguntas; let i = index">
+                            <!-- Icono Circular con X (Lucide Icon) -->
+                              <span class="text-red-500 hover:text-red-700 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin-left: 90%;margin-top: 2%;" (click)="deleteQuestion(i)">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9l-6 6m0-6l6 6" />
+                                </svg>
+                              </span>
+
+                            <div class="relative w-90">
+                              <input  type="text" [placeholder]="pregunta.texto" [(ngModel)]="preguntas[i].texto" class="w-full bg-transparent focus:outline-none focus:border-red-700 transition-colors duration-300"/>
+                            </div>
+                            
+                            <div *ngFor="let respuesta of pregunta.respuestas let u = index;trackBy: trackByIndex">
+                              <label class="flex items-center space-x-2">
+                                  <!-- Radio Button -->
+                                  <input type="radio" [name]="'pregunta' + i" [value]="respuesta"class="form-radio text-red-500"/>
+                                  <!-- Input de Texto -->
+                                  <div class="relative w-60">
+                                    <input type="text" [placeholder]="respuesta" [(ngModel)]="preguntas[i].respuestas[u]" class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300"/>
+                                  </div>
+                              </label>
+                            </div>
+                            <br>
+                            <hr>
+                          </div>
+                         
+                        
+                      </div>
+                      <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 68%; margin-top: 5%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+                      <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 30%;margin-top: -12%; transform: translateX(-50%);background-color: aliceblue;" (click)="addQuestions()">Agregar</button>
+                      
+                </div>
+            </div>
+        </div>
+</div>
+    
+    
+        
+
