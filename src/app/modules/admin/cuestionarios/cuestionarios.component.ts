@@ -36,7 +36,6 @@ interface Pregunta {
 export class CuestionariosComponent {
   base64Image:string | null = null;
   base64Image2:string | null = null;
-  nameImg = '';
   headers = ['data:image/jpeg;base64,','data:image/png;base64,','data:image/jpg;base64,','data:application/octet-stream;base64,'];
   isDragging=false;
   isDragging2=false;
@@ -61,6 +60,7 @@ export class CuestionariosComponent {
       p.texto = n+"."+p.texto.split(".")[1];
       n++;
     });
+    
     ///////////////////////////////////////
     this.preguntas.forEach((p) => {
       this.endQ.push({
@@ -108,7 +108,9 @@ export class CuestionariosComponent {
       this.opciones.push(tema[0]);    
       this.opciones.push(tema[3]);
       this.opciones.push(tema[2]);
-  
+
+
+
       console.log("Opciones:", this.opciones);
 
       // Limpiar las categorías antes de asignar las nuevas
@@ -169,7 +171,21 @@ export class CuestionariosComponent {
 
       reader.onload = () => {
         this.base64Image = reader.result as string;
-        this.nameImg = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onDrop2(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.base64Image2 = reader.result as string;
       };
       reader.readAsDataURL(file);
     }

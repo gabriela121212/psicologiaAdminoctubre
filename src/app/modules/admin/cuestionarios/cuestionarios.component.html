@@ -36,7 +36,7 @@
                       <!-- Área de arrastre para imágenes -->
                       <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-4 dropzone" style="width: 35%; height: 120px; border-radius: 20px; background-color: transparent;margin-left: 4%;" [style.border]="!base64Image2 ? '2px dashed white' : '2px solid white'" 
                       [class.dragging]="isDragging2" [style.backgroundImage]="!hasValidHeader(base64Image2) ? 'url(data:image/jpeg;base64,' + base64Image2+ ')' : ('url(' + base64Image2+ ')')" [style.backgroundSize]="'100% 100%'"[style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'"
-                      (dragenter)="onDragEnter($event)"(dragleave)="onDragLeave($event)"(dragover)="onDragOver($event)"(drop)="onDrop($event)">
+                      (dragenter)="onDragEnter($event)"(dragleave)="onDragLeave($event)"(dragover)="onDragOver($event)"(drop)="onDrop2($event)">
                           <!-- Texto dentro del área -->
                           <h3 class="text-white text-center" *ngIf="!base64Image2"> Arrastre imagen o importe de un archivo</h3>
                           <!-- Icono debajo del texto -->

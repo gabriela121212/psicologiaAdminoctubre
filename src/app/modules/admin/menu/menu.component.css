@@ -1,0 +1,105 @@
+.title h1 {
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    background: #061755;
+    margin: 0;
+}
+
+/* Ícono en la parte superior izquierda */
+.icono-cerrar {
+    position: absolute;
+    top: 14px;
+    left: 27px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(173, 167, 167);
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 20px;
+}
+
+/* Texto "Selecciona una temática" */
+.texto-seleccion {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 23px;
+    font-size: 15px;
+    margin-left: -20%;
+}
+
+/* Estilos para los rectángulos grandes */
+.rectangulo-grande {
+    width: 168.54px;
+    background-color: #3498db;
+    margin: 10px auto;
+    position: relative;
+}
+
+/* Alturas de los rectángulos grandes */
+.rect1 { 
+    height: 509px;
+    margin-left: 16%;
+    margin-top: -45%;
+    background-color :#cc8f2e;
+ }
+.rect2 { 
+    height: 371px;
+    margin-left: -28%;
+    margin-top: -6%;
+    background-color: aliceblue;
+
+ }
+.rect3 {
+     height: 252px;
+     margin-left: -76%;
+     margin-top: 28%;
+     background-color: #cc2ebf;
+ }
+.rect4 {
+     height: 130px;
+     margin-left: -56%;
+     margin-top: 63%;
+     background-color: #2600ff;
+ }
+
+/* Rectángulos pequeños sobrepuestos */
+.rectangulo-pequeno {
+    width: 168.54px;
+    height: 97.55px;
+    background-color: #2ecc71;
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: -7.2%;
+}
+
+
+.rectangulo-pequeno h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: white;
+    font-size: 18px;
+    margin: 0;
+}
+
+.rectangulo-pequeno p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: white;
+    font-size: 14px;
+    margin: 0;
+}
+
+.inter {
+    font-family: 'Inter', sans-serif;
+}
+

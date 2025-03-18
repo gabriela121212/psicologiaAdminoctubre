@@ -30,6 +30,8 @@ export class SidebarComponent {
     { label: 'Tematicas', path: '/admin/tematicas' },
     { label: 'Colores Login', path: '/admin/colores' },
     { label: 'Cuestionario', path: '/admin/cuestionario' },
+    { label: 'Informe Personalizado', path: '/admin/informe' },
+    { label: 'Menu', path: '/admin/menu' },
   ];
 
   async logout() {

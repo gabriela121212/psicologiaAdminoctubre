@@ -1,0 +1,97 @@
+<div class="container-fluid p-0">
+
+    <!-- Fila 1: Imagen y título -->
+    <div class="row title">
+        <div class="col-12">
+            <h1>UTPL Administración</h1>
+        </div>
+    </div>
+
+    <!-- Fila 2: Columnas con contenido -->
+    <div class="row" style="background: linear-gradient(to right, #1e3c72, #2a5298);">
+
+        <!-- Columna izquierda -->
+        <div class="col-md-4">
+            <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
+            <div class="overflow-hidden" style="width: 70%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+                <!-- Fila 1: Ícono y Texto -->
+                <div class="row" style="height: 10%; position: relative;background-color: #3284FF;">
+                    <div class="texto-seleccion">IR A TEMÁTICAS</div>
+                </div>
+                <br>
+                <!-- CONTENEDOR PADRE QUE ENCAPSULA LOS 4 RECTÁNGULOS -->
+                <div class="relative w-[100%] h-[545px] flex flex-wrap gap-4 overflow-hidden">
+                    
+                    <h3 style="color: white;text-align: center;font-size: 20px;font-family: 'Inter', sans-serif;font-weight: 600;margin-left: 11%;">Bienvenido a la búsqueda <br> del bienestar</h3>
+                    <div style="height: 50px; width: 90%; background-color: white; border-radius: 30px;margin-top: -10%;margin-left: 4%;"></div>
+
+                    <!-- Scroll Pane horizontal -->
+                    <div class="w-[100%] h-[215px] overflow-x-scroll overflow-y-hidden scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+                        <!-- Contenedor Flex para alinear los rectángulos en fila -->
+                        <div class="flex flex-row w-[310%]">
+                            <!-- Primer Rectángulo Blanco -->
+                            <div class=" overflow-hidden w-[100%] h-[168px] bg-white m-4 rounded-lg shadow-md" style="outline: black 1.4px solid;" *ngFor="let methods of methodsList">
+                                <p style="font-family: 'Inter', sans-serif; font-weight: bold; font-size: 0.9rem; margin-left: 4%;">{{methods.title}}</p>
+                                <hr>
+                                <!-- Scroll en la descripción (vertical) -->
+                                <div class="w-[100%] h-[145px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2">
+                                    <p style="font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-left: 3%;">{{methods.description}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    
+                </div>
+            </div>
+        </div>
+    
+        <!-- Columna derecha -->
+        <div class="col-md-8">
+            <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
+            <div style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+                
+                <!-- Título principal -->
+                <!-- selector -->
+                <div class="flex flex-col items-start space-y-4">
+
+                    <label for="estado" class="text-lg font-semibold text-white">Selecciona una opción:</label>
+                    <select id="estado" [(ngModel)]="seleccion" (change)="actualizarSeleccion()" 
+                            class="p-2 border rounded-lg shadow-md bg-white focus:ring-2 focus:ring-blue-500">
+                      <option *ngFor="let opcion of opciones" [value]="opcion">
+                        {{ opcion }}
+                      </option>
+                    </select>
+                  </div>
+                  <br>
+                
+
+
+
+                <!-- contenido sobre las tematicas -->
+                <div class="mb-3">
+                    <hr>
+                    <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Tecnicas</h3>
+                    <div class="w-[100%] h-[450px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2">
+                        <div class="input-group" style="width: 80%;" *ngFor="let methods of methodsList">
+                            <input type="text" [(ngModel)]="methods.title"class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300 text-white"/>
+                            <br>
+                            <br>
+                            <textarea [(ngModel)]="methods.description"  class="w-[100%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2 focus:outline-none focus:border-red-700 transition-colors duration-300 resize-none"rows="4" style="margin-top: 3%;"></textarea>
+                            <br>
+                            <br>
+                        </div>  
+                    </div>
+                </div>
+                
+                <!-- Botón "Publicar" -->
+                <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 50%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    

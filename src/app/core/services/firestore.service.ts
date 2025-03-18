@@ -21,6 +21,24 @@ interface Category {
   questions?: Question[];
 }
 
+export interface Exercise {
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  videoUrl: string;
+  order: number;
+}
+
+export interface Method {
+  id: string;
+  title: string;
+  description: string;
+  route: string;
+  order: number;
+  exercises: Exercise[];
+}
+
 
 
 @Injectable({
@@ -60,6 +78,45 @@ export class FirestoreService {
       })
     );
   }
+
+  fetchCategoriesWithMethods(): Observable<Category[]> {
+    const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
+    return collectionData(categoriesCollection, { idField: 'id' }).pipe(
+      switchMap((categories: Category[]) => {
+        if (!categories.length) return of([]);
+  
+        const categoryObservables = categories.map((category) => {
+          const methodsCollection = collection(this.firestore, `categories/${category.id}/methods`) as CollectionReference<Method>;
+          return collectionData(methodsCollection, { idField: 'id' }).pipe(
+            switchMap((methods: Method[]) => {
+              if (!methods.length) return of({ ...category, methods: [] });
+  
+              const methodObservables = methods.map((method) => {
+                const exercisesCollection = collection(this.firestore, `categories/${category.id}/methods/${method.id}/exercises`) as CollectionReference<Exercise>;
+                return collectionData(exercisesCollection, { idField: 'id' }).pipe(
+                  defaultIfEmpty([]), // Si no hay ejercicios, se devuelve un array vacío
+                  map((exercises: Exercise[]) => ({ ...method, exercises }))
+                );
+              });
+  
+              return combineLatest(methodObservables).pipe(
+                map((methodsWithExercises) => ({ ...category, methods: methodsWithExercises }))
+              );
+            }),
+            defaultIfEmpty({ ...category, methods: [] }) // Si no hay métodos, se devuelve un array vacío
+          );
+        });
+        return combineLatest(categoryObservables);
+      })
+    );
+  }
+  
+
+
+
+
+
+
 
 
   updateColor(documentId: string, newColor: number) {
@@ -147,6 +204,13 @@ async  updateQuestions(documentId: string, newQuestions: Question[]) {
     return from(getDownloadURL(imageRef));
   }
 
+  // Función para obtener la URL del audio en Firebase Storage
+  getAudioUrl(audioName: string): Observable<string> {
+    const audioRef = ref(this.storage, `audios/${audioName}`); // Ruta en Firebase
+    return from(getDownloadURL(audioRef)); // Obtener URL del audio
+  }
+
+
   // Función para obtener la imagen en base64
   getImageBase64(imageName: string): Observable<string> {
     return this.getImageUrl(imageName).pipe(
@@ -176,6 +240,29 @@ async  updateQuestions(documentId: string, newQuestions: Question[]) {
     // Subir la imagen a Firebase Storage
     return from(uploadBytes(imageRef, blob));
   }
+
+   // Función para actualizar un audio en Firebase desde un HTMLAudioElement
+   updateAudio(audioName: string, audioElement: HTMLAudioElement): Observable<void> {
+    return new Observable(observer => {
+      // Obtener la URL del audio
+      fetch(audioElement.src).then(response => response.blob()) // Convertir a Blob
+        .then(blob => {
+          const audioFile = new File([blob], audioName, { type: blob.type }); // Convertir Blob a File
+          const audioRef = ref(this.storage, `audios/${audioName}`); // Referencia en Firebase Storage
+
+          // Subir archivo a Firebase
+          uploadBytes(audioRef, audioFile)
+            .then(() => {
+              observer.next(); // Notificar que se completó
+              observer.complete();
+            })
+            .catch(error => observer.error(error));
+        })
+        .catch(error => observer.error(error));
+    });
+  }
+
+  
   // Función auxiliar para convertir base64 a Blob
   private base64ToBlob(base64: string): Blob {
     const byteString = atob(base64.split(',')[1]);

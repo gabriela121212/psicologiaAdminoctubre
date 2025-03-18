@@ -1,0 +1,122 @@
+<div class="container-fluid p-0">
+
+    <!-- Fila 1: Imagen y título -->
+    <div class="row title">
+        <div class="col-12">
+            <h1>UTPL Administración</h1>
+        </div>
+    </div>
+
+    <!-- Fila 2: Columnas con contenido -->
+    <div class="row" style="background: linear-gradient(to right, #1e3c72, #2a5298);">
+
+        <!-- Columna izquierda -->
+        <div class="col-md-4">
+            <!-- Rectángulo principal con fondo degradado y bordes redondeados -->
+            <div class="overflow-hidden" style="width: 70%; height: 700px; background: linear-gradient(to bottom, #398AD5, #F9F9F9); border-radius: 40px; margin: 20px auto;">
+                <!-- Fila 1: Ícono y Texto -->
+                <div class="row" style="height: 50%; position: relative;">
+                    <h3 class="texto-seleccion">INFORME PERSONALIZADO</h3>
+                    <h3 style="color: white;text-align: center;margin-top: -35%;font-size: 15px;font-family: 'Inter', sans-serif;font-weight: 600;">
+                        Basado en tus respuestas al cuestionario,<br>      
+                        hemos identificado los siguientes <br>
+                        factores que pueden estar contribuyendo <br>
+                        a tu nivel de estrés. A continuación, te <br>
+                        ofrecemos algunas sugerencias <br>
+                        personalizadas para abordar estos <br>
+                        factores.
+                    </h3>
+                </div>
+
+                <!-- CONTENEDOR PADRE QUE ENCAPSULA LOS 4 RECTÁNGULOS -->
+                <div class="relative w-[100%] h-[545px] flex flex-wrap gap-4 overflow-hidden" style="margin-top: -40%;margin-left: 13%;">
+                    
+                    <!-- Área de selector de imágenes -->
+                    <div class="d-flex flex-column align-items-center justify-content-center mt-3 mb-4 dropzone" style="width: 60%; height: 170px; border-radius: 20px; background-color: transparent;" 
+                    [style.backgroundImage]="!hasValidHeader(base64Image) ? 'url(data:image/jpeg;base64,' + base64Image+ ')' : ('url(' + base64Image+ ')')" [style.backgroundSize]="'cover'"
+                    [style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'">
+                        <!-- Texto dentro del área -->
+                        <h3 class="text-white text-center" *ngIf="!base64Image">importe de un archivo</h3>
+                        <!-- Icono debajo del texto -->
+                        <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image"></i>
+                        
+                        <button (click)="toggleAudio()" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-white text-black rounded-full shadow-lg hover:bg-blue-600 transition duration-300" style="margin-top: -56%;margin-left: 75%;">
+                            <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                        </button>
+                        <!-- Input oculto para la selección de archivos -->
+                        <input type="file" #fileInput2 (change)="onFileSelected2($event)" accept="image/*" hidden>
+                    </div>
+
+                    <!-- Área de selección de archivo -->
+                    <div class="d-flex flex-column align-items-center justify-content-center dropzone" 
+                    style="width: 80%; height: 250px; border-radius: 20px; background-color: transparent; margin-top: -60%;" 
+                    [style.backgroundImage]="!hasValidHeader(base64Image2) ? 'url(data:image/jpeg;base64,' + base64Image2+ ')' : ('url(' + base64Image2+ ')')" 
+                    [style.backgroundSize]="'cover'" [style.backgroundPosition]="'center'" [style.backgroundRepeat]="'no-repeat'">
+                        <!-- Texto dentro del área -->
+                        <h3 class="text-white text-center" *ngIf="!base64Image2">Seleccione una imagen desde su equipo</h3>
+                        <!-- Icono -->
+                        <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image2"></i>
+                        <!-- Input oculto para la selección de archivos -->
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    
+        <!-- Columna derecha -->
+        <div class="col-md-8">
+            <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
+            <div style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+                
+                <!-- Título principal -->
+                <h1 style="color: white; font-family: 'Arial', sans-serif;">Informe Personalizado</h1>
+                
+                <!-- contenido sobre las tematicas -->
+                <div class="mb-3">
+                    <hr>
+                    <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Imagen 1 </h3>
+                    <label for="colorSelectorGoogle" class="form-label text-white">Selecciona Una imagen de cuadro de Texto dando clik al boton</label>
+                    <div class="input-group" style="width: 40%;">
+                        <!-- Botón para abrir el explorador de archivos -->
+                        <button (click)="openFileExplorer2()" class="btn btn-primary mt-3 ">Seleccionar imagen 1</button>
+                    </div>
+
+                    <hr>
+                    <br>
+                    <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Imagen 2</h3>
+                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un imagen o un render para la categoria inferior</label>
+                    <div class="input-group" style="width: 40%;">
+                          <!-- Botón para abrir el explorador de archivos -->
+                          <button (click)="openFileExplorer()" class="btn btn-primary mt-3 ">Seleccionar imagen 2</button>
+                    </div>
+                    <hr>
+                    <br>
+                    <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Seleccion de Audio</h3>
+                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un audio que reproducira el aplicativo</label>
+                    <div class="input-group" style="width: 40%;">
+                        <!-- Input oculto para seleccionar archivos de audio -->
+                        <input type="file" #fileInput3 (change)="onFileSelected3($event)" accept="audio/*" hidden>
+                        <!-- Botón para abrir el explorador de archivos -->
+                        <button (click)="openFileExplorer3()" class="btn btn-primary mt-3 ">Seleccionar Audio</button>
+                    </div>
+                    <hr>
+                </div>
+                
+                <!-- Botón "Publicar" -->
+                <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 70%; margin-top: -14%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    
