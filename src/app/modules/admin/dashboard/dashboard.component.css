@@ -1,8 +1,53 @@
- .title h1 {
-    color: white;
-    text-align: center;
-    padding: 20px 0;
-    background: #061755;
-    margin: 0;
+/* Asegúrate de que Tailwind esté importado en tu archivo global, por ejemplo, en styles.css */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* --- Clases Personalizadas para el Efecto de Vidrio --- */
+
+/* Efecto Glassmorphism */
+.glass-effect {
+    background-color: rgba(255, 255, 255, 0.15); /* Fondo blanco semi-transparente */
+    backdrop-filter: blur(10px) saturate(180%); /* Desenfoque y saturación para el efecto de vidrio */
+    -webkit-backdrop-filter: blur(10px) saturate(180%); /* Para compatibilidad con navegadores basados en WebKit */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
 }
 
+/* El fondo degradado se aplica directamente en el HTML con bg-gradient-to-r from-blue-500 to-purple-700 */
+
+/* El color sólido del primer cuadro (Usuarios Registrados) */
+/* Lo hemos ajustado con bg-indigo-700 en Tailwind, que se parece más al tono de la imagen */
+
+/* Para el cuadro transparente total sin efecto vidrio, ya usamos bg-white bg-opacity-10 */
+
+
+/* Para navegadores basados en WebKit (Chrome, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+    scroll-behavior: smooth; /* Desplazamiento suave */
+    width: 8px; /* Ancho del scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05); /* Fondo transparente claro para el track */
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* Color del "pulgar" del scrollbar, semi-transparente */
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1); /* Borde sutil para que resalte un poco */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Un poco más visible al pasar el ratón */
+}
+
+/* Para Firefox (en caso de que necesites compatibilidad específica) */
+/* .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+} */
+
+html{
+    scroll-behavior: smooth; /* Desplazamiento suave */
+}

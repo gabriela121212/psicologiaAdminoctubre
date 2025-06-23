@@ -51,44 +51,70 @@
         <!-- Columna derecha -->
         <div class="col-md-8">
             <!-- Rectángulo con bordes redondeados, opacidad y desenfoque -->
-            <div style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
-                
-                <!-- Título principal -->
-                <!-- selector -->
+            <!-- Contenedor envuelto en *ngIf -->
+            <div class="overflow-hidden" style="width: 80%; height: 700px; background-color: rgba(0, 0, 0, 0.4); margin: 20px auto; border-radius: 20px; padding: 30px;">
+                            
+                <!-- Selector -->
                 <div class="flex flex-col items-start space-y-4">
-
                     <label for="estado" class="text-lg font-semibold text-white">Selecciona una opción:</label>
                     <select id="estado" [(ngModel)]="seleccion" (change)="actualizarSeleccion()" 
                             class="p-2 border rounded-lg shadow-md bg-white focus:ring-2 focus:ring-blue-500">
-                      <option *ngFor="let opcion of opciones" [value]="opcion">
+                    <option *ngFor="let opcion of opciones" [value]="opcion">
                         {{ opcion }}
-                      </option>
+                    </option>
                     </select>
-                  </div>
-                  <br>
-                
+                </div>
+                <br>
 
-
-
-                <!-- contenido sobre las tematicas -->
-                <div class="mb-3">
+                <!-- Contenido sobre las temáticas -->
+                <div *ngIf="mostrarEstructura1" class="mb-3">
                     <hr>
-                    <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Tecnicas</h3>
+                    <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">Técnicas</h3>
                     <div class="w-[100%] h-[450px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2">
-                        <div class="input-group" style="width: 80%;" *ngFor="let methods of methodsList">
-                            <input type="text" [(ngModel)]="methods.title"class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300 text-white"/>
+                        <div class="input-group" style="width: 80%;" *ngFor="let methods of methodsList; let i = index">
+                            <div class="flex items-center w-full">
+                                <input type="text" [(ngModel)]="methods.title" class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300 text-white"/>
+                                <!-- Icono con evento de clic -->
+                                <i *ngIf="i === 0" class="bi bi-arrow-right ml-2 text-white text-lg" style="cursor: pointer;"(click)="ocultarEstructura1()"></i>
+                            </div>
                             <br>
                             <br>
-                            <textarea [(ngModel)]="methods.description"  class="w-[100%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2 focus:outline-none focus:border-red-700 transition-colors duration-300 resize-none"rows="4" style="margin-top: 3%;"></textarea>
+                            <textarea [(ngModel)]="methods.description" class="w-[100%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2 focus:outline-none focus:border-red-700 transition-colors duration-300 resize-none" rows="4" style="margin-top: 3%;"></textarea>
                             <br>
                             <br>
                         </div>  
                     </div>
                 </div>
-                
+
+                <!-- Contenido tecnica1 -->
+                <div *ngIf="mostrarEstructura1_1" class="mb-3">
+                    <div class="w-[100%] h-[450px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2">
+                        <div class="input-group" style="width: 80%;" *ngFor="let exersices of objtTecnica1; let i = index">
+                            <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">
+                                Técnica {{exersices.order}} <input type="text" [(ngModel)]="exersices.title" class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300 text-white"/>
+                            </h3>
+                            <textarea [(ngModel)]="exersices.description" class="w-[100%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 p-2 focus:outline-none focus:border-red-700 transition-colors duration-300 resize-none" rows="4" style="margin-top: 3%;"></textarea>
+                            <h3 style="color: #EA80FC; font-family: 'Arial', sans-serif;">
+                                Duracion <input type="text" [(ngModel)]="exersices.duration" class="w-full bg-transparent border-b-2 border-blue-500 focus:outline-none focus:border-red-700 transition-colors duration-300 text-white"/>
+                                Video <video *ngIf="arrayVideos" [src]="arrayVideos[i]" controls width="500"></video>  
+                                <input type="file" #fileInput (change)="onFileSelected($event)" accept="video/*" hidden>
+                                <!-- Botón para abrir el explorador de archivos -->
+                                <button (click)="openFileExplorer(i)" class="btn btn-primary mt-3 ">Seleccionar Video</button>
+                                <br>
+                                <br>
+                                <br>
+                            </h3>
+                        </div>  
+                    </div>
+                </div>
+
+
                 <!-- Botón "Publicar" -->
-                <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 50%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+                <button *ngIf="mostrarEstructura1" class="btn p-3 rounded-pill shadow-lg"style="width: 30%; margin-left: 50%; transform: translateX(-50%); background-color: aliceblue;"(click)="onkeyClikPublic()">Publicar</button>
+                <button *ngIf="mostrarEstructura1_1" class="btn p-3 rounded-pill shadow-lg"style="width: 30%; margin-left: 70%; transform: translateX(-50%); background-color: aliceblue;"(click)="atrasTecnicasG()">Regresar</button>
+                <button *ngIf="mostrarEstructura1_1" class="btn p-3 rounded-pill shadow-lg"style="width: 30%; margin-left: 20%;margin-top:-12%; background-color: aliceblue;"(click)="addTecnicas()">Añadir Tecnica</button>
             </div>
+
         </div>
     </div>
 

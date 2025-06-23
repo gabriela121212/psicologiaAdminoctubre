@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, CollectionReference} from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, CollectionReference,onSnapshot} from '@angular/fire/firestore';
 import { Storage, ref, getDownloadURL,uploadBytes } from '@angular/fire/storage';
-import { doc, updateDoc,writeBatch, setDoc,getDocs } from '@angular/fire/firestore';
+import { doc, updateDoc,writeBatch, setDoc,getDocs,QueryDocumentSnapshot,DocumentData } from '@angular/fire/firestore';
 import { from,Observable,combineLatest,of,defaultIfEmpty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import {Usuario,SimpleExercise,ExpressiveExercise,GratitudeExercise,ExpressiveEntry,GratitudeEntry,CompletedExercises} from '@core/models/user.model';
+
+
 
 interface Question {
   options: string[];
@@ -79,6 +82,8 @@ export class FirestoreService {
     );
   }
 
+
+
   fetchCategoriesWithMethods(): Observable<Category[]> {
     const categoriesCollection = collection(this.firestore, 'categories') as CollectionReference<Category>;
     return collectionData(categoriesCollection, { idField: 'id' }).pipe(
@@ -111,12 +116,7 @@ export class FirestoreService {
     );
   }
   
-
-
-
-
-
-
+  
 
 
   updateColor(documentId: string, newColor: number) {
@@ -193,6 +193,172 @@ async  updateQuestions(documentId: string, newQuestions: Question[]) {
 
 
 
+async updateMethods(documentId: string, newQuestions: Method[]) {
+  try {
+    const categoryDocRef = doc(this.firestore, 'categories', documentId);
+    const methodsCollectionRef = collection(categoryDocRef, 'methods'); // Referencia a la colección 'methods'
+
+    const batch = writeBatch(this.firestore);
+
+    // Obtener los documentos existentes en la colección 'methods' y eliminarlos
+    const snapshot = await getDocs(methodsCollectionRef);
+    snapshot.forEach((docSnap) => {
+      batch.delete(docSnap.ref); // Borrar cada documento de la colección
+    });
+
+    await batch.commit(); // Ejecutar la eliminación antes de agregar los nuevos documentos
+
+    // Crear nuevos documentos en 'methods' y su subcolección 'exercises'
+    for (const [index, method] of newQuestions.entries()) {
+      const methodDocRef = doc(methodsCollectionRef, `tecnica${index + 1}`);
+      
+      // Crear el documento en 'methods' excluyendo 'exercises'
+      const { exercises, ...methodData } = method; 
+      await setDoc(methodDocRef, methodData);
+
+      // Verificar si tiene ejercicios y agregarlos a la subcolección 'exercises'
+      if (exercises && exercises.length > 0) {
+        const exercisesCollectionRef = collection(methodDocRef, 'exercises');
+        
+        const batchExercises = writeBatch(this.firestore);
+        
+        exercises.forEach((exercise, exIndex) => {
+          const exerciseDocRef = doc(exercisesCollectionRef, `ejercicio${exIndex + 1}`);
+          batchExercises.set(exerciseDocRef, exercise);
+        });
+
+        await batchExercises.commit(); // Guardar todos los ejercicios en batch
+      }
+    }
+
+    console.log('Colección de métodos y ejercicios actualizada con éxito');
+  } catch (error) {
+    console.error('Error al actualizar los métodos:', error);
+  }
+}
+
+
+/////traer usuarios de firestore/////
+    getAllUsersRealtime(): Observable<Usuario[]> {
+    return new Observable((observer) => {
+      const usersRef = collection(this.firestore, 'users');
+      const unsubscribe = onSnapshot(usersRef, async (snapshot) => {
+
+        // Procesar cada usuario en paralelo usando Promise.all
+        const usuarioPromises = snapshot.docs.map(async (userDoc: QueryDocumentSnapshot<DocumentData>) => {
+          const data = userDoc.data();
+          const usuario: Usuario = {
+            id: data['id'],
+            displayName: data['displayName'],
+            email: data['email'],
+            picture: data['picture'],
+            resultados: data['resultados'] || {},
+            completed_exercises: {},
+          };
+
+          const commentsRef = collection(userDoc.ref, 'comments');
+          const commentsSnap = await getDocs(commentsRef);
+          usuario.comments = {};
+
+          if (!commentsSnap.empty) {
+            for (const commentDoc of commentsSnap.docs) {
+              const commentData = commentDoc.data();
+              usuario.comments[commentDoc.id] = {
+                comment: commentData['comment'],
+                timestamp: commentData['timestamp']?.toDate?.() || null,
+              };
+            }
+          }
+
+          const completed: CompletedExercises = {};
+          const completedExercisesRef = collection(userDoc.ref, 'completed_exercises');
+          const completedSnap = await getDocs(completedExercisesRef);
+
+          for (const exerciseDoc of completedSnap.docs) {
+            const exerciseId = exerciseDoc.id;
+            const exerciseData = exerciseDoc.data();
+            if (exerciseId === 'ejercicio1' ||exerciseId === 'ejercicio2' || exerciseId === 'ejercicio3' || exerciseId === 'ejercicio4' || exerciseId === 'ejercicio5'){
+                  completed[exerciseId as keyof Pick<CompletedExercises,'ejercicio1' | 'ejercicio2' | 'ejercicio3' | 'ejercicio4' | 'ejercicio5'>] = {
+                    attempts: exerciseData['attempts'],
+                    categoryId: exerciseData['categoryId'],
+                    completed_at: exerciseData['completed_at']?.toDate?.() || null,
+                    duration: exerciseData['duration'],
+                    methodId: exerciseData['methodId'],
+                    title: exerciseData['title'],
+                 } as SimpleExercise;
+              }
+
+            if (exerciseId === 'expressive_tecnica3') {
+              const entriesRef = collection(exerciseDoc.ref, 'entries');
+              const entriesSnap = await getDocs(entriesRef);
+
+              const entries: { [entryId: string]: ExpressiveEntry } = {};
+              for (const entryDoc of entriesSnap.docs) {
+                const entryData = entryDoc.data();
+                entries[entryDoc.id] = {
+                  content: entryData['content'],
+                  created_at: entryData['created_at']?.toDate?.() || null,
+                  duration: entryData['duration'],
+                };
+              }
+              completed.expressive_tecnica3 = {
+                attempts: exerciseData['attempts'],
+                categoryId: exerciseData['categoryId'],
+                created_at: exerciseData['created_at']?.toDate?.() || null,
+                methodId: exerciseData['methodId'],
+                title: exerciseData['title'],
+                entries,
+              };
+            }
+
+            if (exerciseId === 'gratitude_tecnica2') {
+              const entriesRef = collection(exerciseDoc.ref, 'entries');
+              const entriesSnap = await getDocs(entriesRef);
+
+              const entries: { [entryId: string]: GratitudeEntry } = {};
+              for (const entryDoc of entriesSnap.docs) {
+                const entryData = entryDoc.data();
+                entries[entryDoc.id] = {
+                  created_at: entryData['created_at']?.toDate?.() || null,
+                  duration: entryData['duration'],
+                  gratitude_entries: entryData['gratitude_entries'] || [],
+                };
+              }
+
+              completed.gratitude_tecnica2 = {
+                attempts: exerciseData['attempts'],
+                categoryId: exerciseData['categoryId'],
+                created_at: exerciseData['created_at']?.toDate?.() || null,
+                methodId: exerciseData['methodId'],
+                title: exerciseData['title'],
+                entries,
+              };
+            }
+          }
+          usuario.completed_exercises = completed;
+          return usuario;
+        });
+
+          const usuariosFinales = await Promise.all(usuarioPromises);
+          observer.next(usuariosFinales);
+        });
+      return () => unsubscribe();
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
 
 
 
@@ -208,6 +374,16 @@ async  updateQuestions(documentId: string, newQuestions: Question[]) {
   getAudioUrl(audioName: string): Observable<string> {
     const audioRef = ref(this.storage, `audios/${audioName}`); // Ruta en Firebase
     return from(getDownloadURL(audioRef)); // Obtener URL del audio
+  }
+
+  getVideo(url: string): Observable<string> {
+    if (!url) return of('');
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      switchMap(blob => {
+        if (!blob) return of(''); 
+        return of(URL.createObjectURL(blob));
+      })
+    );
   }
 
 
@@ -261,6 +437,63 @@ async  updateQuestions(documentId: string, newQuestions: Question[]) {
         .catch(error => observer.error(error));
     });
   }
+
+
+
+  //funcion para actualizar e insertar video al store//
+  updateVideos(nuevosVideos: [string, number, File][]): Observable<void> {
+    return new Observable(observer => {
+      // Separar las tuplas en dos listas
+      const insertar: [string, number, File][] = nuevosVideos.filter(([cadena]) => cadena === "nada");
+      const actualizar: [string, number, File][] = nuevosVideos.filter(([cadena]) => cadena !== "nada");
+
+      console.log("Videos a insertar:", insertar);
+      console.log("Videos a actualizar:", actualizar);
+
+      // Insertar videos nuevos
+      const insertPromises = insertar.map(([_, __, file]) => {
+        const videoRef = ref(this.storage, `videos/${file.name}`);
+        return uploadBytes(videoRef, file);
+      });
+
+      // Actualizar videos existentes
+      const updatePromises = actualizar.map(([url, __, file]) => {
+        const filePath = this.extractStoragePath(url);
+        if (!filePath) return Promise.resolve(); // Si no se pudo extraer el path, evitar error
+
+        const videoRef = ref(this.storage, filePath);
+        return uploadBytes(videoRef, file);
+      });
+
+      // Ejecutar todas las promesas en paralelo
+      Promise.all([...insertPromises, ...updatePromises])
+        .then(() => {
+          console.log("Todos los videos han sido insertados/actualizados.");
+          observer.next();
+          observer.complete();
+        })
+        .catch(error => {
+          console.error("Error al subir videos:", error);
+          observer.error(error);
+        });
+    });
+  }
+
+  //funcion para extraer el nombre del video en el token//
+  private extractStoragePath(url: string): string | null {
+    const match = url.match(/%2F(.+?)\?alt=media/);
+    return match ? `videos/${match[1]}` : null;
+  }
+
+
+
+
+
+
+
+
+
+
 
   
   // Función auxiliar para convertir base64 a Blob
