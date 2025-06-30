@@ -249,8 +249,9 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
           const data = userDoc.data();
           const usuario: Usuario = {
             id: data['id'],
-            displayName: data['displayName'],
+            displayName: data['displayName'] || 'Usuario sin nombre',
             email: data['email'],
+            estado: data['estado'] || false,
             picture: data['picture'],
             resultados: data['resultados'] || {},
             completed_exercises: {},

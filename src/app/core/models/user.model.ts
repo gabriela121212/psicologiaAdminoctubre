@@ -72,6 +72,7 @@ export interface Usuario {
   id: string;
   displayName: string;
   email: string;
+  estado: boolean;
   picture: string;
   resultados: {
     [categoria: string]: Resultado;
