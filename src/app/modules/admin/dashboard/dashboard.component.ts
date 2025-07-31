@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FirestoreService } from '@core/services/firestore.service';
+import { FirestoreService,Method } from '@core/services/firestore.service';
 import { Usuario , CompletedExercises} from '@core/models/user.model';
 import { Observable,BehaviorSubject } from 'rxjs';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartType,ChartData,ChartOptions } from 'chart.js';
+import { routes } from 'src/app/app.routes';
 
 
 
@@ -30,18 +31,81 @@ export class DashboardComponent implements OnInit {
 
   usuariosSubject = new BehaviorSubject<Usuario[]>([]);
   constructor(private firestoreService: FirestoreService) {}
+  selectedMethodId: string = ''; // ID del método seleccionado
+  metodos: Method[] = []; // Lista de métodos cargados
+  routes: { route: string; title: string }[] = [];
+  rutasConTitulos = [
+  { route: 'gratitude', title: 'Técnica 2: Ejercicio de gratitud' },
+  { route: 'expressive', title: 'Técnica 3: Ejercicio Escritura Expresiva' }
+];
+  selectedTechniqueTitle: string = ''; // Título de la técnica seleccionada
+filteredRoutes: { route: string; title: string }[] = [];
 
+  
+selectedRoute: string = ''; 
+  ngOnInit(): void {
+     this.onTechniqueChange(this.selectedTechnique);
+  this.obtenerTitulosMetodos();
+  this.firestoreService.getAllUsersRealtime().subscribe({
+    next: (users) => {
+      const ordenados = users.sort((a, b) => {
+        // Primero por estado (activos antes que inactivos)
+        if (a.estado && !b.estado) return -1;
+        if (!a.estado && b.estado) return 1;
+        // Si el estado es igual, ordenar por nombre
+        const nombreA = (a.displayName || '').toLowerCase();
+        const nombreB = (b.displayName || '').toLowerCase();
+        return nombreA.localeCompare(nombreB);
+      });
 
-    ngOnInit(): void {
-    this.firestoreService.getAllUsersRealtime().subscribe({
-      next: (users) => {
-        console.log(users);
-        this.usuariosSubject.next(users);
-        this.onTechniqueChange("gratitude")
-      },
-      error: (err) => console.error(err),
+      this.usuariosSubject.next(ordenados);
+      this.onTechniqueChange("gratitude");
+    },
+    error: (err) => console.error(err),
+  });
+}
+  obtenerTitulosMetodos(): void {
+    this.firestoreService.fetchCategoriesWithMethods().subscribe((categorias) => {
+      // Extraer rutas y títulos de las técnicas (métodos)
+      const rutasConTitulos = categorias.flatMap((categoria: any) =>
+        (categoria.methods || []).map((metodo: Method) => ({
+          route: metodo.route,
+          title: metodo.title
+        }))
+      );
+
+      this.routes = rutasConTitulos; // Guardar las rutas y títulos
+      this.selectedRoute = rutasConTitulos[0]?.route || ''; // Establecer la primera ruta como seleccionada
+      this.selectedTechniqueTitle = rutasConTitulos[0]?.title || ''; // Establecer el título de la primera técnica
+      console.log('Métodos cargados:', this.routes);
     });
   }
+  obtenerTitulosMetodos1(): void {
+  this.firestoreService.fetchCategoriesWithMethods().subscribe((categorias) => {
+    const rutasConTitulos = categorias.flatMap((categoria: any) =>
+      (categoria.methods || []).map((metodo: Method) => ({
+        route: metodo.route,
+        title: metodo.title
+      }))
+    );
+
+    this.routes = rutasConTitulos;
+console.log('Métodos obtenidos:', rutasConTitulos);
+
+    this.filteredRoutes = rutasConTitulos.filter(r =>
+      r.route === 'tecnica2' || r.route === 'tecnica3'
+    );
+
+    // Establecer selección inicial
+    this.selectedTechnique = this.filteredRoutes[0]?.route || '';
+    this.selectedTechniqueTitle = this.filteredRoutes[0]?.title || '';
+
+    // Ejecutar cambio inicial de datos
+    this.onTechniqueChange(this.selectedTechnique);
+  });
+}
+
+
 
   visibilityPanel(indice: number) {
     this.panel = true;
@@ -77,10 +141,22 @@ export class DashboardComponent implements OnInit {
       return Object.keys(gratitude.entries).length;
     };
 
+
+
+
+
+
     commentUser(usuario: Usuario): string[] {
-    if (!usuario.comments) return [];
-    return Object.values(usuario.comments).map(c => c.comment);
-  }
+  if (!usuario.comments) return [];
+
+  // Filtrar comentarios que tengan methodId igual a la ruta seleccionada
+  return Object.values(usuario.comments)
+    .filter(c => c.methodId === this.selectedRoute)
+    .map(c => c.comment);
+}
+  
+
+
 
 
 
@@ -97,29 +173,74 @@ export class DashboardComponent implements OnInit {
 
     dataGeneric:number[] = [];     
 
-    public pieChartOptions: ChartOptions<'pie'> = {plugins: {legend: {labels: {color: '#ffffff', font: {size: 12}}}}};
+    public pieChartOptions: ChartOptions<'pie'> = {
+  plugins: {
+    tooltip: {
+      bodyFont: {
+        size: 10
+      },
+      padding: 20,
+      backgroundColor: '#333',
+      titleFont: {
+        size: 14
+      }
+    },
+    legend: {
+      labels: {
+        color: '#ffffff',
+        font: {
+          size: 12
+        }
+      }
+    }
+  }
+};
+
     public pieChartData: ChartData<'pie', number[], string> = {labels: this.pieChartLabels,datasets: [{data: [...this.dataGeneric],label: 'Promedio (gratitude)',backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF']}]};
     public pieChartType: 'pie' = 'pie';
+    
 
 
 
 
-    onTechniqueChange(value: string) {
-      this.dataGeneric = [];
-      this.dataGeneric =  value === 'gratitude' ? this.calcularPromediosPorEjercicio('gratitude_tecnica2') : this.calcularPromediosPorEjercicio('expressive_tecnica3');      
-      console.log(this.dataGeneric);            
-      const data = this.porcentuar(this.dataGeneric);
-      console.log(data);
-      this.pieChartData = {
-        labels: this.pieChartLabels,
-        datasets: [
-          {
-            data: [...data],
-            label: `Promedio (${value})`
-          }
-        ]
-      };
-    }
+
+
+
+
+
+onTechniqueChange(value: string) {
+  const selectedRouteObj = this.rutasConTitulos.find(routeObj => routeObj.route === value);
+  this.selectedTechniqueTitle = selectedRouteObj ? selectedRouteObj.title : '';
+
+  const nuevosDatos = value === 'gratitude'
+    ? this.calcularPromediosPorEjercicio('gratitude_tecnica2')
+    : this.calcularPromediosPorEjercicio('expressive_tecnica3');
+
+  const dataPorcentual = this.porcentuar(nuevosDatos);
+
+  if (JSON.stringify(this.pieChartData.datasets[0]?.data) !== JSON.stringify(dataPorcentual)) {
+    this.dataGeneric = nuevosDatos;
+
+    this.pieChartData = {
+      labels: this.pieChartLabels,
+      datasets: [
+        {
+          data: [...dataPorcentual],
+          label: `Promedio (${this.selectedTechniqueTitle})`
+        }
+      ]
+    };
+
+    console.log('✅ Datos cambiaron, gráfico actualizado:', dataPorcentual);
+  } else {
+    console.log('⏸️ Datos no cambiaron, gráfico NO redibujado.');
+  }
+}
+
+
+
+
+
 
 
 

@@ -50,6 +50,7 @@ export interface ExpressiveEntry {
 export interface comments {
   comment: string;
   timestamp: Date;
+  methodId: string;
 }
 
 export interface GratitudeExercise {
@@ -72,11 +73,20 @@ export interface Usuario {
   id: string;
   displayName: string;
   email: string;
+  estado: boolean;
   picture: string;
   resultados: {
     [categoria: string]: Resultado;
   };
   completed_exercises: CompletedExercises;
   comments?:{ [entryId: string]: comments };
+}
+
+export interface Nivel {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  audioUrl: string;
+
 }
 

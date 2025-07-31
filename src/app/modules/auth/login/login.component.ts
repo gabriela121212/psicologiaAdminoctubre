@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy,
   OnInit,
 } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../../guards/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { UserModel } from '../../../core/models/user.model';
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   public user$: Observable<UserModel | null> = this.authService.user$;
   public isLoading = false;
   public errorMessage: string | null = null;
+// En tu login.component.ts
 
   ngOnInit() {
     this.user$.pipe(take(1)).subscribe((user) => {
@@ -38,6 +39,8 @@ export class LoginComponent implements OnInit {
   async login() {
     this.isLoading = true;
     this.errorMessage = null;
+      localStorage.setItem('token', 'mi-token-de-ejemplo'); 
+  this.router.navigate(['/admin']);
 
     try {
       await this.authService.loginWithGoogle();

@@ -58,10 +58,10 @@
 
                     <!-- progreso de técnicas por usuario -->
                     <div class="p-6 rounded-2xl shadow-lg glass-effect flex flex-col justify-between min-h-[16rem]">
-                        <h2 class="text-xl font-semibold mb-4">Progreso de técnicas por usuario</h2>
+                        <h2 class="text-xl font-semibold mb-4">Progreso por usuario de la técnica 1: estiramientos suaves</h2>
 
                         <!-- Contenedor con scroll -->
-                        <div *ngIf="!panel" class="flex-grow overflow-y-auto custom-scrollbar max-h-64">
+                        <div *ngIf="!panel" class="flex-grow overflow-y-auto custom-scrollbar h-[300px]">
                             <!-- Listado de usuarios -->
                             <div  *ngFor="let user of usuariosSubject | async; let i = index" class="flex items-center justify-between py-2 border-b border-white border-opacity-10 last:border-b-0" >
                                 <!-- columna izquierda-->
@@ -85,7 +85,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="panel" class="flex-grow overflow-y-auto custom-scrollbar max-h-64 p-2 pt-1 space-y-4 justify-start">
+
+                        <div *ngIf="panel" class="flex-grow overflow-y-auto custom-scrollbar max-h-50 p-2 pt-1 space-y-4 justify-start">
                             <!-- Fila con 3 filas internas (vertical stack) -->
                             <div class="flex flex-col space-y-4 bg-white bg-opacity-10 p-4 rounded-lg shadow-inner">
 
@@ -131,12 +132,22 @@
                     <div class="p-4 rounded-xl shadow-md glass-effect flex flex-col justify-between min-h-[16rem]">
                         <h2 class="text-lg font-semibold mb-2 text-white">Tiempo por ejercicio</h2>
                         <!-- Selector de técnica -->
-                        <select [(ngModel)]="selectedTechnique" (change)="onTechniqueChange(selectedTechnique)" class="mb-2 p-1 rounded bg-gray-700 text-white text-sm">
-                            <option value="gratitude">Técnica 2: Gratitude</option>
-                            <option value="expressive">Técnica 3: Expressive</option>
+                         <select
+                            [(ngModel)]="selectedTechnique"
+                            (change)="onTechniqueChange(selectedTechnique)"
+                            class="mb-2 p-1 rounded bg-gray-700 text-white text-sm"
+                        >
+                            <option
+                            *ngFor="let ruta of rutasConTitulos"
+                            [value]="ruta.route"
+                            [title]="ruta.title"
+                            >
+                            {{ ruta.title }}
+                            </option>
                         </select>
+
                         <div class="flex-grow flex items-center justify-center overflow-y-auto custom-scrollbar">
-                            <div class="w-[200px] h-[200px] md:w-[300px] md:h-[300px]">
+                            <div class="w-[20px] h-[200px] md:w-[350px] md:h-[300px]">
                                 <canvas baseChart
                                         [data]="pieChartData"
                                         [type]="pieChartType"
@@ -150,46 +161,48 @@
                     </div>
                 </div>
 
-
-
-
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="md:col-span-2 p-6 rounded-2xl shadow-lg glass-effect flex flex-col justify-between min-h-[16rem]">
-                        <h2 class="text-xl font-semibold mb-4">Técnicas más utilizadas</h2>
-                        <div class="flex-grow flex items-center justify-center">
-                            <p class="text-gray-400">Contenido de "Técnicas más utilizadas"</p>
-                        </div>
-                    </div>
-                    <div class="md:col-span-1 p-6 rounded-2xl shadow-lg glass-effect flex flex-col justify-between min-h-[16rem]">
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-3 p-6 rounded-2xl shadow-lg glass-effect flex flex-col justify-between min-h-[16rem]">
                         <h2 class="text-xl font-semibold mb-4">Comentarios</h2>
-                        <div class="flex-grow flex items-center justify-center">
-                            <!-- Contenedor con scroll más alto -->
-                            <div class="flex-grow overflow-y-auto custom-scrollbar max-h-44">
-
-                                <!-- Recorremos usuarios, pero solo mostramos si tienen comentarios -->
-                                <div *ngFor="let user of usuariosSubject | async; let i = index">
-                                    <div *ngIf="user.comments && (user.comments | keyvalue).length > 0" class="flex justify-between py-2 border-b border-white border-opacity-10 last:border-b-0">
-                                        <!-- Columna izquierda: contenedor vertical -->
-                                        <div class="flex flex-col mr-4">
-                                            <!-- Imagen + Nombre en fila -->
-                                            <div class="flex items-center space-x-4">
-                                                <img [src]="user.picture?.trim() !== '' ? user.picture : defaultPicture" alt="Foto de perfil" class="w-12 h-12 rounded-full object-cover border"/>
-                                                <p class="text-white text-lg font-semibold">{{ user.displayName }}</p>
-                                            </div>
-
-                                            <!-- Comentarios debajo -->
-                                            <div class="mt-2">
-                                                <ng-container *ngFor="let com of commentUser(user)">
-                                                    <p class="text-white text-sm italic">{{ com}}</p>
-                                                    <hr class="border-white my-1" />
-                                                </ng-container>
-                                            </div>
-                                        </div>
+                                                                <!-- Selector de rutas -->
+                                                        <select [(ngModel)]="selectedRoute">
+                                                        <option *ngFor="let r of routes" [value]="r.route">{{ r.title }}</option>
+                                                        </select>
+                                        <p></p>
+                                        <p></p>
+                       <div class="flex-grow overflow-auto custom-scrollbar">
+                        <!-- Contenedor con grid horizontal y 2 filas por columna -->
+                        <div class="grid grid-flow-col auto-cols-max gap-6 max-h-[32rem] px-2">
+                            
+                            <!-- Cada comentario ocupa una celda -->
+                            <ng-container *ngFor="let user of usuariosSubject | async">
+                            <ng-container *ngIf="user.comments && (commentUser(user).length > 0)">
+                                <div class="flex flex-col justify-between">
+                                <div class="p-4 rounded bg-white bg-opacity-10 shadow-inner w-72">
+                                    <!-- Imagen + nombre -->
+                                    <div class="flex items-center space-x-4 mb-2">
+                                    <img
+                                        [src]="user.picture?.trim() !== '' ? user.picture : defaultPicture"
+                                        alt="Foto de perfil"
+                                        class="w-12 h-12 rounded-full object-cover border"
+                                    />
+                                    <p class="text-white text-lg font-semibold">{{ user.displayName }}</p>
                                     </div>
-                                 </div>
-                            </div>
-                        </div>
+                                    <!-- Comentarios debajo -->
+                                    <div class="overflow-auto custom-scrollbar max-h-32">
+                                    <ng-container *ngFor="let com of commentUser(user)">
+                                        <p class="text-white text-sm italic">{{ com }}</p>
+                                        <hr class="border-white my-1" />
+                                    </ng-container>
+                                    </div>
+                                </div>
+                                </div>
+                            </ng-container>
+                            </ng-container>
+                         </div>
+                        <br>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -197,9 +210,34 @@
             <div class="lg:col-span-1 p-6 rounded-2xl shadow-lg bg-white bg-opacity-10 flex flex-col justify-between min-h-[16rem]">
                 <h2 class="text-xl font-semibold mb-4">Usuarios Activos</h2>
                 <div class="flex-grow flex items-center justify-center">
-                    <p class="text-gray-400">Contenido de "Usuarios Activos"</p>
+                    <!-- Contenedor con scroll -->
+                        <div  class="flex-grow overflow-y-auto custom-scrollbar h-[700px]">
+                            <!-- Listado de usuarios -->
+                            <div  *ngFor="let user of usuariosSubject | async; let i = index" class="flex items-center justify-between py-2 border-b border-white border-opacity-10 last:border-b-0" >
+                                <!-- columna izquierda-->
+                                <div class="flex items-center space-x-4 mr-2">
+                                    <!-- Imagen con ícono de estado -->
+                                    <div class="relative w-12 h-12">
+                                        <img [src]="user.picture?.trim() !== '' ? user.picture : defaultPicture" alt="Foto de perfil"
+                                           class="w-12 h-12 rounded-full object-cover border transition-all duration-300"
+                                           [ngClass]="{ 'brightness-50': !user.estado }"/>
+                                        
+                                        <!-- Círculo verde en la esquina inferior izquierda si está activo -->
+                                        <div *ngIf="user.estado" class="absolute bottom-0 left-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                    </div>
+
+                                    <!-- Nombre del usuario -->
+                                    <p class="text-white text-lg font-semibold transition-all duration-300" [ngClass]="{ 'brightness-50': !user.estado }">
+                                        {{ user.displayName }}
+                                    </p>
+                                </div>
+                            </div>
+                      </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+

@@ -5,8 +5,8 @@ import { doc, updateDoc,writeBatch, setDoc,getDocs,QueryDocumentSnapshot,Documen
 import { from,Observable,combineLatest,of,defaultIfEmpty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import {Usuario,SimpleExercise,ExpressiveExercise,GratitudeExercise,ExpressiveEntry,GratitudeEntry,CompletedExercises} from '@core/models/user.model';
-
+import {Usuario,SimpleExercise,ExpressiveExercise,GratitudeExercise,ExpressiveEntry,GratitudeEntry,CompletedExercises,Nivel} from '@core/models/user.model';
+import { tap } from 'rxjs/operators';
 
 
 interface Question {
@@ -15,13 +15,13 @@ interface Question {
   title: string;
   values: number[];
 }
-
 interface Category {
   id: string;
   title: string;
   colors: string[];
   order: number;
   questions?: Question[];
+   methods: Method[];
 }
 
 export interface Exercise {
@@ -51,6 +51,38 @@ export interface Method {
 
 export class FirestoreService {
   constructor(private firestore: Firestore, private storage: Storage, private http: HttpClient) {}
+
+  getNivelesFromEstres(): Observable<Nivel[]> {
+  const estresDocRef = doc(this.firestore, 'categories', 'estrés');
+  const nivelesCollectionRef = collection(estresDocRef, 'Nivel');
+  
+  return collectionData(nivelesCollectionRef, { idField: 'id' }).pipe(
+    map((data: Nivel[]) =>
+      data.map(item => ({
+        id: item.id,
+        nombre: item.nombre,
+        descripcion: item.descripcion,
+        audioUrl: item.audioUrl
+      }))
+    )
+  );
+}
+
+updateNivelAudio(categoria: string, nivelId: string, file: File): Observable<void> {
+  const storagePath = `audios/${categoria}/${nivelId}/audio.m4a`; // Ahora crea estructura visual por nivel
+  const audioRef = ref(this.storage, storagePath);
+
+  return from(uploadBytes(audioRef, file)).pipe(
+    switchMap(() => getDownloadURL(audioRef)),
+    switchMap((url) => {
+      const docRef = doc(this.firestore, `categories/${categoria}/Nivel/${nivelId}`);
+      return from(updateDoc(docRef, { audioUrl: url }));
+    })
+  );
+}
+
+
+
 
   getPublic(): Observable<any[]> {
     const usersCollection = collection(this.firestore, 'public');
@@ -238,6 +270,7 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
 }
 
 
+
 /////traer usuarios de firestore/////
     getAllUsersRealtime(): Observable<Usuario[]> {
     return new Observable((observer) => {
@@ -249,8 +282,9 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
           const data = userDoc.data();
           const usuario: Usuario = {
             id: data['id'],
-            displayName: data['displayName'],
+            displayName: data['displayName'] || 'Usuario sin nombre',
             email: data['email'],
+            estado: data['estado'] || false,
             picture: data['picture'],
             resultados: data['resultados'] || {},
             completed_exercises: {},
@@ -263,10 +297,13 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
           if (!commentsSnap.empty) {
             for (const commentDoc of commentsSnap.docs) {
               const commentData = commentDoc.data();
+              console.log('Comentario recibido:', commentData);
               usuario.comments[commentDoc.id] = {
                 comment: commentData['comment'],
                 timestamp: commentData['timestamp']?.toDate?.() || null,
+                methodId: commentData['methodId'],
               };
+
             }
           }
 
@@ -409,6 +446,13 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
 
   ///////////////////////////////////////////////////
   // Función para actualizar la imagen en Firebase Storage
+
+  updateDescripcionNivel(categoriaId: string, nivelId: string, nuevaDescripcion: string): Promise<void> {
+  const nivelDocRef = doc(this.firestore, `categories/${categoriaId}/Nivel/${nivelId}`);
+  return updateDoc(nivelDocRef, { descripcion: nuevaDescripcion });
+}
+
+
   updateImage(imageName: string, base64Image: string): Observable<any> {
     const imageRef = ref(this.storage,`images/${imageName}`);
     // Convertir la imagen base64 a Blob
@@ -508,6 +552,5 @@ async updateMethods(documentId: string, newQuestions: Method[]) {
 
     return new Blob([ab]);
   }
+  
 }
-
-

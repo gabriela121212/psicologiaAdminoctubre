@@ -1,6 +1,7 @@
 {
+
   "hosting": {
-    "public": "public",
+    "public": "dist/psicologia-app",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,16 +10,11 @@
     "rewrites": [
       {
         "source": "**",
-        "headers": [
-          {
-            "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin-allow-popups"
-          }
-        ],
         "destination": "/index.html"
       }
     ]
   },
+
   "functions": [
     {
       "source": "functions",

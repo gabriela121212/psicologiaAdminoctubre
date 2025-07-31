@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { AuthService } from './modules/auth/services/auth.service';
+import { AuthService } from './guards/auth.service';
 import { UserModel } from '@core/models/user.model';
 import { Observable } from 'rxjs';
 

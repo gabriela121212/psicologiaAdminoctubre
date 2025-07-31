@@ -37,9 +37,31 @@
                     [style.backgroundPosition]="'center'"[style.backgroundRepeat]="'no-repeat'">
                         <!-- Texto dentro del área -->
                         <h3 class="text-white text-center" *ngIf="!base64Image">importe de un archivo</h3>
+
+
                         <!-- Icono debajo del texto -->
                         <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image"></i>
-                        
+                            <div *ngIf="descripcionSeleccionada"
+                                style="margin-top: -80px;
+                                        max-height: 280px;
+                                        font-size: 10px;
+                                        overflow-y: auto;
+                                        display: flex;
+                                        flex-direction: column-reverse;">
+
+                                <textarea [(ngModel)]="descripcionEditada"
+                                            rows="5"
+                                            style="
+                                                width: 100%;
+                                                font-size: 10px;
+                                                resize: vertical;">
+                                </textarea>
+                            </div>
+
+
+
+
+
                         <button (click)="toggleAudio()" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-white text-black rounded-full shadow-lg hover:bg-blue-600 transition duration-300" style="margin-top: -56%;margin-left: 75%;">
                             <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
@@ -98,24 +120,57 @@
                           <!-- Botón para abrir el explorador de archivos -->
                           <button (click)="openFileExplorer()" class="btn btn-primary mt-3 ">Seleccionar imagen 2</button>
                     </div>
-                    <hr>
-                    <br>
-                    <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Seleccion de Audio</h3>
-                    <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un audio que reproducira el aplicativo</label>
-                    <div class="input-group" style="width: 40%;">
-                        <!-- Input oculto para seleccionar archivos de audio -->
-                        <input type="file" #fileInput3 (change)="onFileSelected3($event)" accept="audio/*" hidden>
-                        <!-- Botón para abrir el explorador de archivos -->
-                        <button (click)="openFileExplorer3()" class="btn btn-primary mt-3 ">Seleccionar Audio</button>
-                    </div>
+        
                     <hr>
                 </div>
-                
-                <!-- Botón "Publicar" -->
-                <button class="btn  p-3 rounded-pill shadow-lg" style="width: 30%;margin-left: 70%; margin-top: -14%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+
+                <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Selecciona nivel</h3>
+                <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un nivel:</label>
+                <div class="input-group" style="width: 40%;">
+
+                    <select id="selectNivel" (change)="onChangeNivel($event)" style="background: #c325ea; color:white; border-radius:10px; height:35px; width: 170px;">
+                        <option *ngFor="let nivel of niveles" [value]="nivel.id">
+                            {{ nivel.nombre }}
+                        </option>
+                    </select>
+                </div>
+                <i class="bi bi-image mt-3 text-white" style="font-size: 2rem;" *ngIf="!base64Image"></i>
+                            <div *ngIf="descripcionSeleccionada"
+                                style="
+                                        
+                                        max-height: 290px;
+                                        flex-direction: column-reverse;">
+
+                                <textarea [(ngModel)]="descripcionEditada"
+                                            rows="5"
+                                            style="
+                                                color:white;
+                                                background-color: rgba(173, 167, 167, 0);
+                                                width: 100%;
+                                                font-size: 15px;
+                                                resize: vertical;">
+                                </textarea>
+                                
+                            </div>
+                            <h3 style="color: #FF6F00; font-family: 'Arial', sans-serif;">Seleccion de Audio</h3>
+                            <label for="colorSelectorUTPL" class="form-label text-white">Selecciona un audio que reproducira el aplicativo</label>
+                            <p>
+                            <button (click)="openFileExplorer3()" class="btn btn-primary mt-3">
+                                subir audio
+                            </button>
+                            <input type="file" #fileInput3 style="display: none;" (change)="onFileSelected3($event)" accept="audio/*" />
+                            <hr>
+                            <div>
+                             <!-- Botón "Publicar" -->
+                                <button class="btn  p-2 rounded-pill shadow-lg" style="width: 30%;margin-left: 50%; margin-top: 0%; transform: translateX(-50%);background-color: aliceblue;" (click)="onkeyClikPublic()">Publicar</button>
+                            </div>
+                            
             </div>
         </div>
     </div>
+
+
+
 
 
 
