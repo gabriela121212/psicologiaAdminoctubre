@@ -1,5 +1,4 @@
 {
-
   "hosting": {
     "public": "dist/psicologia-app",
     "ignore": [
@@ -8,13 +7,9 @@
       "**/node_modules/**"
     ],
     "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+      { "source": "**", "destination": "/index.html" }
     ]
   },
-
   "functions": [
     {
       "source": "functions",
@@ -28,9 +23,9 @@
         "*.local"
       ],
       "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
+        "npm --prefix functions run build"
       ]
+
     }
   ]
 }
